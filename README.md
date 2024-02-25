@@ -4,7 +4,7 @@ This is a simple ping pong game implemented in assembly language. The game is in
 
 #Controls
 
-A and W for moving the paddles up and down for Player 1.
+A and W for moving the paddles up and down for Player 1.                                                                                                                                     
 O and L for moving the paddles up and down for Player 2.
 
 #Features
