@@ -2,7 +2,7 @@
 
 Forked from https://github.com/arham2211/ping-pong-x86-game
 
-To test this project, run the commands:
+To test this project on Windows, run the commands:
 ```
 git clone --recursive https://github.com/TheGabmeister/pong-x86-assembly.git
 cd pong-x86-assembly
