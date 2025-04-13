@@ -1,4 +1,5 @@
 ; Pong Game
+; Modified version of https://github.com/arham2211/ping-pong-x86-game
 
 ; Library from the book Assembly Language for x86 Processors by Kip Irvine
 ; https://github.com/surferkip/asmbook/blob/main/Irvine.zip
@@ -122,7 +123,7 @@ mov edx,0
 call DRAW_BALL
 call DRAW_LEFT_PADDLES
 call DRAW_TEXT
-call DRAW_BOX
+;call DRAW_BOX
 CHECK_TIME:
 
 call CLEAR_SCREEN
