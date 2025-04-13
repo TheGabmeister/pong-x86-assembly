@@ -69,17 +69,6 @@ string16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN  
 
 ; =========================================================================================================
 
-tilte0 BYTE "                                                                                                 ",0
-title1 BYTE "                    _____   ____  _   _  _____               _____          __  __ ______        ",0
-title2 BYTE "                   |  __ \ / __ \| \ | |/ ____|            / ____|   /\   |  \/  |  ____|        ",0
-title3 BYTE "                   | |__) | |  | |  \| | |  __            | |  __   /  \  | \  / | |__           ",0
-title4 BYTE "                   |  ___/| |  | | . ` | | |_ |           | | |_ | / /\ \ | |\/| |  __|            ",0
-title5 BYTE "                   | |    | |__| | |\  | |__| |           | |__| |/ ____ \| |  | | |____           ",0
-title6 BYTE "                   |_|     \____/|_| \_|\_____|            \_____/_/    \_\_|  |_|______|           ",0
-title7 BYTE "                                                                                                   ",0
-title8 BYTE "                                                                                                     ",0
-title9 BYTE "                                                                                                      ",0
-
  WIN1 BYTE "                   _____  _           __     ________ _____     __   __          _______ _   _  _____     ",0
  WIN2 BYTE "                  |  __ \| |        /\\ \   / /  ____|  __ \   /_ |  \ \        / /_   _| \ | |/ ____|	",0
  WIN3 BYTE "                  | |__) | |       /  \\ \_/ /| |__  | |__) |   | |   \ \  /\  / /  | | |  \| | (___		",0
@@ -97,12 +86,7 @@ title9 BYTE "                                                                   
 																		   
 
 
-START_GAME_MSG BYTE "                     1. PLAY GAME                                 ",0
-DISPLAY BYTE "                     2. DISPLAY WINNERS                                      ",0
-EXIT_MSG BYTE "                     3. EXIT                                      ",0
-SELECT_OPTION_MSG BYTE "                     Select an option (1 or 2):   ",0
 NUMBER_OF_WINNERS BYTE " NUMBER OF PLAYER WHO HAVE WON TILL NOW ",0
-INVALID_MSG BYTE "Invalid option. Please try again.",0
 Player1_Score BYTE "PLAYER 1 Points: ",0
 Player2_Score BYTE "PLAYER 2 Points: ",0
 PLAYER1 BYTE 0
@@ -116,13 +100,15 @@ LENGTH_PLAYER2 BYTE ?
 INPUT_PLAYER_1 BYTE "Enter Player 1's Name: ",0
 INPUT_PLAYER_2 BYTE "Enter Player 2's Name: ",0
 
-BOX_TOP_LEFT_X BYTE 15
-BOX_TOP_LEFT_Y BYTE 40
+BOX_TOP_LEFT_X BYTE 0
+BOX_TOP_LEFT_Y BYTE 0
 
 PlAYER_CURSOR_X BYTE 19
 PlAYER_CURSOR_Y BYTE 42
 
 NEXT_LINE BYTE 0dh,0ah
+
+; =========================================================================================================
 
 .code
 main PROC
@@ -136,6 +122,7 @@ mov edx,0
 call DRAW_BALL
 call DRAW_LEFT_PADDLES
 call DRAW_TEXT
+call DRAW_BOX
 CHECK_TIME:
 
 call CLEAR_SCREEN
@@ -165,6 +152,8 @@ Exitprogram:
 
 main ENDP
 
+; =========================================================================================================
+
 VIEW_FILE PROC
 call crlf
 mov edx,OFFSET NUMBER_OF_WINNERS
@@ -192,7 +181,7 @@ HandleError:
     RET
 VIEW_FILE ENDP
 
-
+; =========================================================================================================
 
 STORE_IN_FILE1 PROC
 
@@ -212,6 +201,7 @@ invoke CloseHandle,fileHandle
     RET
 STORE_IN_FILE1 ENDP
 
+; =========================================================================================================
 
 STORE_IN_FILE2 PROC
     
@@ -231,6 +221,7 @@ invoke CloseHandle,fileHandle
     RET
 STORE_IN_FILE2 ENDP
 
+; =========================================================================================================
 
 PLAYER2_WINS PROC
 
@@ -274,6 +265,8 @@ call STORE_IN_FILE2
 RET
 PLAYER2_WINS ENDP
 
+; =========================================================================================================
+
 PLAYER1_WINS PROC
 
 	call STORE_IN_FILE1
@@ -316,7 +309,7 @@ PLAYER1_WINS PROC
 RET
 PLAYER1_WINS ENDP
 
-
+; =========================================================================================================
 
 mainMenu PROC
     
@@ -340,7 +333,7 @@ mainMenu PROC
     call Gotoxy
     mov edx, OFFSET intro
     call WriteString
-    call ResetCursor
+    call RESET_CURSOR
 
 	MenuLoop:
 		call Readkey
@@ -361,11 +354,13 @@ mainMenu PROC
 
 mainMenu ENDP
 
+; =========================================================================================================
+
 DRAW_BOX PROC
     ; Draw the top-left corner character
     mov dh, BOX_TOP_LEFT_X
     mov dl, BOX_TOP_LEFT_Y
-    call gotoxy
+    call Gotoxy
     mov al, '+'
     call WriteChar
 
@@ -375,7 +370,7 @@ DRAW_BOX PROC
         INC BOX_TOP_LEFT_Y
         mov dh, BOX_TOP_LEFT_X
         mov dl, BOX_TOP_LEFT_Y
-        call gotoxy
+        call Gotoxy
         mov al, '-'
         call WriteChar
         LOOP L1
@@ -391,13 +386,13 @@ DRAW_BOX PROC
         INC BOX_TOP_LEFT_X
         mov dh, BOX_TOP_LEFT_X
         mov dl, BOX_TOP_LEFT_Y
-        call gotoxy
+        call Gotoxy
         mov al, '|'
         call WriteChar
         Loop L2
 
     ; Draw the bottom-right corner character
-	call gotoxy
+	call Gotoxy
     mov al, '+'
     call WriteChar
 
@@ -408,14 +403,14 @@ DRAW_BOX PROC
         DEC BOX_TOP_LEFT_Y
         mov dh, BOX_TOP_LEFT_X
         mov dl, BOX_TOP_LEFT_Y
-        call gotoxy
+        call Gotoxy
         mov al, '-'
         call WriteChar
         LOOP L3
 
     ; Draw the bottom-left corner character
 	 INC BOX_TOP_LEFT_Y
-     call gotoxy
+     call Gotoxy
 	 mov al, '+'
 	 call WriteChar
 
@@ -426,7 +421,7 @@ DRAW_BOX PROC
         DEC BOX_TOP_LEFT_X
         mov dh, BOX_TOP_LEFT_X
         mov dl, BOX_TOP_LEFT_Y
-        call gotoxy
+        call Gotoxy
         mov al, '|'
         call WriteChar
         Loop L4
@@ -435,7 +430,7 @@ DRAW_BOX PROC
 
  DRAW_BOX ENDP
 
-  
+; =========================================================================================================
 
 DRAW_LEFT_PADDLES PROC
 	
@@ -447,7 +442,7 @@ DRAW_LEFT_PADDLES PROC
 
 	mov eax, BLUE
     call SetTextColor
-	call gotoxy
+	call Gotoxy
 	mov al, 0DBh
 	call WRITEchar
 
@@ -455,7 +450,7 @@ DRAW_LEFT_PADDLES PROC
 	L1:
 		inc PADDLE_LEFT_X	
 		mov dh,PADDLE_LEFT_X
-		call gotoxy
+		call Gotoxy
 		mov eax, BLUE
         call SetTextColor
 
@@ -471,6 +466,8 @@ DRAW_LEFT_PADDLES PROC
 ret
 DRAW_LEFT_PADDLES ENDP
 
+; =========================================================================================================
+
 DRAW_RIGHT_PADDLES PROC
 
 	mov dh,PADDLE_RIGHT_X
@@ -481,21 +478,19 @@ DRAW_RIGHT_PADDLES PROC
 
 	mov eax, RED
     call SetTextColor
-	call gotoxy
+	call Gotoxy
 	mov al, 0DBh
 	call WRITEchar
 
 	mov ecx,6
 	L1:
-	mov al, 0DBh
+		mov al, 0DBh
 		inc PADDLE_RIGHT_X	
 		mov dh,PADDLE_RIGHT_X
-		call gotoxy
+		call Gotoxy
 		call writechar
 		mov eax, RED
         call SetTextColor
-
-		
 	Loop L1
 
 	mov bl,ORIGINAL_PADDLE_RIGHT_X
@@ -506,6 +501,7 @@ DRAW_RIGHT_PADDLES PROC
 RET
 DRAW_RIGHT_PADDLES ENDP
 
+; =========================================================================================================
 
 MOVE_PADDLES PROC
 
@@ -527,7 +523,7 @@ MOVE_LEFT_PADDLE_DOWN:
 	inc PADDLE_LEFT_X
 	mov dh,VAL1
 	mov dl,1
-	call gotoxy
+	call Gotoxy
 	mov al, ' '
 	call WRITEchar
 	INC VAL1
@@ -544,7 +540,7 @@ MOVE_LEFT_PADDLE_UP:
 	dec PADDLE_LEFT_X
 	mov dh,VAL2
 	mov dl,1
-	call gotoxy
+	call Gotoxy
 	mov al, ' '
 	call WRITEchar
 	DEC VAL1
@@ -573,7 +569,7 @@ MOVE_RIGHT_PADDLE_DOWN:
 	inc PADDLE_RIGHT_X
 	mov dh,VAL3
 	mov dl,77
-	call gotoxy
+	call Gotoxy
 	mov al, ' '
 	call WRITEchar
 	INC VAL3
@@ -587,7 +583,7 @@ MOVE_RIGHT_PADDLE_UP:
 	dec PADDLE_RIGHT_X
 	mov dh,VAL4
 	mov dl,77
-	call gotoxy
+	call Gotoxy
 	mov al, ' '
 	call WRITEchar
 	DEC VAL3
@@ -597,11 +593,13 @@ EXIT_PADDLE_MOVEMENT:
 RET
 MOVE_PADDLES ENDP
 
+; =========================================================================================================
+
 DRAW_BALL PROC
 
 	mov dh,BALL_X
 	mov dl,BALL_Y
-	call gotoxy
+	call Gotoxy
 	mov eax, WHITE
     call SetTextColor
 	mov al,'O'
@@ -610,6 +608,7 @@ DRAW_BALL PROC
 RET
 DRAW_BALL ENDP
 
+; =========================================================================================================
 
 CLEAR_SCREEN PROC
 
@@ -618,12 +617,14 @@ CLEAR_SCREEN PROC
 	inc COUNT
 	mov dh,BALL_X
 	mov dl,BALL_Y
-	call gotoxy
+	call Gotoxy
 	mov al,' '
 	call writeCHar
 
 RET
 CLEAR_SCREEN ENDP
+
+; =========================================================================================================
 
 MOVE_BALL PROC
 
@@ -701,6 +702,8 @@ RET
 
 MOVE_BALL ENDP
 
+; =========================================================================================================
+
 RESET_BALL_POS PROC
 
 cmp BALL_Y,0
@@ -709,7 +712,6 @@ inc PLAYER2
 cmp PLAYER2,2
 jne INCREMENT
 call GAME_OVER
-
 
 jmp skip
 player1_scorecard:
@@ -722,17 +724,18 @@ call GAME_OVER
 INCREMENT:
 call DRAW_TEXT
 skip:
-
 	mov BALL_X,14
 	mov BALL_Y,39
 	mov dh,BALL_X
 	mov dl,BALL_Y
-	call gotoxy
+	call Gotoxy
 	mov al,'O'
 	call writeChar
 
 RET
 RESET_BALL_POS ENDP
+
+; =========================================================================================================
 
 DRAW_TEXT PROC
 
@@ -775,6 +778,7 @@ call writedec
 RET
 DRAW_TEXT ENDP
 
+; =========================================================================================================
 
 GAME_OVER PROC
 
@@ -785,11 +789,13 @@ MOV COUNT,0
 RET
 GAME_OVER ENDP
 
-ResetCursor PROC
+; =========================================================================================================
+
+RESET_CURSOR PROC
     mov dl, 0
 	mov dh, 0
 	call Gotoxy
     ret
-ResetCursor ENDP
+RESET_CURSOR ENDP
 
 END main
