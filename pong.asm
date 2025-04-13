@@ -5,17 +5,8 @@
 ; https://github.com/surferkip/asmbook/blob/main/Irvine.zip
 ; Documentation https://csc.csudh.edu/mmccullough/asm/help/
 INCLUDE Irvine32.inc
-BUFFER_SIZE = 501
+
 .data
-
-buffer BYTE BUFFER_SIZE DUP(?)
-filename BYTE "winPeople.txt", 0
-fileHandle HANDLE ?
-stringLength DWORD ?
-
-SPACE BYTE " ",0dh,0ah,0
-
-READ BYTE BUFFER_SIZE DUP(?)
 
 GAME_SPEED DWORD 45				;Change this if the game is running too fast or too slow
 BALL_X BYTE 14                  ;moves row
@@ -43,31 +34,31 @@ VAL4 BYTE 7
 
 GAME_START_FLAG BYTE 0  ;flag to determine if the game should start 
 
-intro BYTE "Press 'ENTER' to Start",0
-introXPos BYTE 50
-introYPos BYTE 25
+STRING_PRESS_ENTER BYTE "Hold 'ENTER' to Start",0
+STRING_PRESS_ENTER_X BYTE 50
+STRING_PRESS_ENTER_Y BYTE 25
 xPos BYTE 17
 yPos BYTE 3
 
 ; Define an array of strings with newline characters at the end
-string_array DWORD string01, string02, string03, string04, string05, string06, string07, string08, string09, string10, string11, string12, string13, string14, string15, string16
-                                                                                   
-string01 BYTE "PPPPPPPPPPPPPPPPP        OOOOOOOOO     NNNNNNNN        NNNNNNNN        GGGGGGGGGGGGG",  0
-string02 BYTE "P::::::::::::::::P     OO:::::::::OO   N:::::::N       N::::::N     GGG::::::::::::G",  0
-string03 BYTE "P::::::PPPPPP:::::P  OO:::::::::::::OO N::::::::N      N::::::N   GG:::::::::::::::G",  0
-string04 BYTE "PP:::::P     P:::::PO:::::::OOO:::::::ON:::::::::N     N::::::N  G:::::GGGGGGGG::::G",  0
-string05 BYTE "  P::::P     P:::::PO::::::O   O::::::ON::::::::::N    N::::::N G:::::G       GGGGGG",  0
-string06 BYTE "  P::::P     P:::::PO:::::O     O:::::ON:::::::::::N   N::::::NG:::::G              ",  0
-string07 BYTE "  P::::PPPPPP:::::P O:::::O     O:::::ON:::::::N::::N  N::::::NG:::::G              ",  0
-string08 BYTE "  P:::::::::::::PP  O:::::O     O:::::ON::::::N N::::N N::::::NG:::::G    GGGGGGGGGG",  0
-string09 BYTE "  P::::PPPPPPPPP    O:::::O     O:::::ON::::::N  N::::N:::::::NG:::::G    G::::::::G",  0
-string10 BYTE "  P::::P            O:::::O     O:::::ON::::::N   N:::::::::::NG:::::G    GGGGG::::G",  0
-string11 BYTE "  P::::P            O:::::O     O:::::ON::::::N    N::::::::::NG:::::G        G::::G",  0
-string12 BYTE "  P::::P            O::::::O   O::::::ON::::::N     N:::::::::N G:::::G       G::::G",  0
-string13 BYTE "PP::::::PP          O:::::::OOO:::::::ON::::::N      N::::::::N  G:::::GGGGGGGG::::G",  0
-string14 BYTE "P::::::::P           OO:::::::::::::OO N::::::N       N:::::::N   GG:::::::::::::::G",  0
-string15 BYTE "P::::::::P             OO:::::::::OO   N::::::N        N::::::N     GGG::::::GGG:::G",  0
-string16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN        GGGGGG   GGGG",  0
+GAME_TITLE DWORD TITLE_01, TITLE_02, TITLE_03, TITLE_04, TITLE_05, TITLE_06, TITLE_07, TITLE_08, TITLE_09, TITLE_10, TITLE_11, TITLE_12, TITLE_13, TITLE_14, TITLE_15, TITLE_16
+TITLE_01 BYTE "PPPPPPPPPPPPPPPPP        OOOOOOOOO     NNNNNNNN        NNNNNNNN        GGGGGGGGGGGGG",  0
+TITLE_02 BYTE "P::::::::::::::::P     OO:::::::::OO   N:::::::N       N::::::N     GGG::::::::::::G",  0
+TITLE_03 BYTE "P::::::PPPPPP:::::P  OO:::::::::::::OO N::::::::N      N::::::N   GG:::::::::::::::G",  0
+TITLE_04 BYTE "PP:::::P     P:::::PO:::::::OOO:::::::ON:::::::::N     N::::::N  G:::::GGGGGGGG::::G",  0
+TITLE_05 BYTE "  P::::P     P:::::PO::::::O   O::::::ON::::::::::N    N::::::N G:::::G       GGGGGG",  0
+TITLE_06 BYTE "  P::::P     P:::::PO:::::O     O:::::ON:::::::::::N   N::::::NG:::::G              ",  0
+TITLE_07 BYTE "  P::::PPPPPP:::::P O:::::O     O:::::ON:::::::N::::N  N::::::NG:::::G              ",  0
+TITLE_08 BYTE "  P:::::::::::::PP  O:::::O     O:::::ON::::::N N::::N N::::::NG:::::G    GGGGGGGGGG",  0
+TITLE_09 BYTE "  P::::PPPPPPPPP    O:::::O     O:::::ON::::::N  N::::N:::::::NG:::::G    G::::::::G",  0
+TITLE_10 BYTE "  P::::P            O:::::O     O:::::ON::::::N   N:::::::::::NG:::::G    GGGGG::::G",  0
+TITLE_11 BYTE "  P::::P            O:::::O     O:::::ON::::::N    N::::::::::NG:::::G        G::::G",  0
+TITLE_12 BYTE "  P::::P            O::::::O   O::::::ON::::::N     N:::::::::N G:::::G       G::::G",  0
+TITLE_13 BYTE "PP::::::PP          O:::::::OOO:::::::ON::::::N      N::::::::N  G:::::GGGGGGGG::::G",  0
+TITLE_14 BYTE "P::::::::P           OO:::::::::::::OO N::::::N       N:::::::N   GG:::::::::::::::G",  0
+TITLE_15 BYTE "P::::::::P             OO:::::::::OO   N::::::N        N::::::N     GGG::::::GGG:::G",  0
+TITLE_16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN        GGGGGG   GGGG",  0
+TITLE_ANIM_SPEED DWORD 90
 
 ; =========================================================================================================
 
@@ -88,7 +79,6 @@ string16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN  
 																		   
 
 
-NUMBER_OF_WINNERS BYTE " NUMBER OF PLAYER WHO HAVE WON TILL NOW ",0
 Player1_Score BYTE "PLAYER 1 Points: ",0
 Player2_Score BYTE "PLAYER 2 Points: ",0
 PLAYER1 BYTE 0
@@ -138,11 +128,11 @@ cmp COUNT,0
 jne CHECK_TIME
 call clrscr
 cmp PLAYER1,2
-jne PLAYER2_JEET_GAYA
+jne PLAYER2_WINNING
 call PLAYER1_WINS
 jmp stop
 
-PLAYER2_JEET_GAYA:
+PLAYER2_WINNING:
 call PLAYER2_WINS
 
 stop:
@@ -157,113 +147,43 @@ main ENDP
 
 ; =========================================================================================================
 
-VIEW_FILE PROC
-call crlf
-mov edx,OFFSET NUMBER_OF_WINNERS
-call writeSTRING
-call crlf
-    mov edx, OFFSET filename
-    call OpenInputFile
-    mov fileHandle, eax
-
-    mov edx, OFFSET READ
-    mov ecx, BUFFER_SIZE
-    call ReadFromFile
-	mov buffer[eax],0
-    ; Process the data as needed
-
-	mov edx,OFFSET READ 
-	call WriteString
-    mov eax,fileHandle
-	call CloseFile
-
-    RET
-
-HandleError:
-    ; Your error-handling code here
-    RET
-VIEW_FILE ENDP
-
-; =========================================================================================================
-
-STORE_IN_FILE1 PROC
-
-INVOKE CreateFile,ADDR filename,GENERIC_WRITE+GENERIC_READ,DO_NOT_SHARE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,0
-mov fileHandle,eax
-mov cl,LENGTHOF PLAYER_1
-mov stringLength,0
-INVOKE SetFilePointer,fileHandle,0,0,FILE_END
-INVOKE WriteFile, fileHandle,ADDR PLAYER_1,LENGTH_PLAYER1 ,ADDR stringLength,NULL
-mov eax, filehandle
-mov edx, offset NEXT_LINE
-mov ecx, lengthof NEXT_LINE
-call writetofile
-invoke CloseHandle,fileHandle
-    
-
-    RET
-STORE_IN_FILE1 ENDP
-
-; =========================================================================================================
-
-STORE_IN_FILE2 PROC
-    
-
-  INVOKE CreateFile,ADDR filename,GENERIC_WRITE+GENERIC_READ,DO_NOT_SHARE,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,0
-mov fileHandle,eax
-mov cl,LENGTHOF PLAYER_2
-mov stringLength,0
-INVOKE SetFilePointer,fileHandle,0,0,FILE_END
-INVOKE WriteFile, fileHandle,ADDR PLAYER_2,LENGTH_PLAYER2,ADDR stringLength,NULL
-mov eax, filehandle
-mov edx, offset NEXT_LINE
-mov ecx, lengthof NEXT_LINE
-call writetofile
-invoke CloseHandle,fileHandle
-
-    RET
-STORE_IN_FILE2 ENDP
-
-; =========================================================================================================
-
 PLAYER2_WINS PROC
 
-call STORE_IN_FILE2
  mov edx, OFFSET LOST1
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET LOST2
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET LOST3
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET LOST4
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET LOST5
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET LOST6
 	mov eax, RED
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 RET
 PLAYER2_WINS ENDP
@@ -272,42 +192,41 @@ PLAYER2_WINS ENDP
 
 PLAYER1_WINS PROC
 
-	call STORE_IN_FILE1
     mov edx, OFFSET WIN1
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET WIN2
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET WIN3
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET WIN4
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET WIN5
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 	mov edx, OFFSET WIN6
 	mov eax, BLUE
 	call SetTextColor
     call WriteString
-    call crlf
+    call Crlf
 
 RET
 PLAYER1_WINS ENDP
@@ -316,25 +235,32 @@ PLAYER1_WINS ENDP
 
 mainMenu PROC
     
-	mov esi, OFFSET string_array
-    mov ecx, LENGTHOF string_array
+	mov eax, YELLOW
+    call SetTextColor
+
+	mov esi, OFFSET GAME_TITLE
+    mov ecx, LENGTHOF GAME_TITLE
     mov bl, xPos
     mov bh, yPos
 
-    L1:                         ; Print game title
-    mov dl, bl
-	mov dh, bh
-	call Gotoxy
-    mov edx, [esi]
-    call WriteString
-    add esi, TYPE string_array
-    inc bh
+    L1:									; Print game title
+		mov eax, TITLE_ANIM_SPEED		; Add a delay per line for a cool animation
+		call delay
+		mov dl, bl
+		mov dh, bh
+		call Gotoxy
+		mov edx, [esi]
+		call WriteString
+		add esi, TYPE GAME_TITLE
+		inc bh
     loop L1
 
-    mov dl, introXPos           ; Print "Press 'ENTER' to Start"
-    mov dh, introYPos
+    mov dl, STRING_PRESS_ENTER_X           ; Print "Press 'ENTER' to Start"
+    mov dh, STRING_PRESS_ENTER_Y
     call Gotoxy
-    mov edx, OFFSET intro
+	mov eax, LIGHTCYAN
+    call SetTextColor
+    mov edx, OFFSET STRING_PRESS_ENTER
     call WriteString
     call RESET_CURSOR
 
@@ -351,7 +277,6 @@ mainMenu PROC
 		call Clrscr
         ret
 
-	call VIEW_FILE
     ExitGame:
         invoke ExitProcess, 0    ; Exit the program
 
