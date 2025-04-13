@@ -17,9 +17,10 @@ SPACE BYTE " ",0dh,0ah,0
 
 READ BYTE BUFFER_SIZE DUP(?)
 
+GAME_SPEED DWORD 45				;Change this if the game is running too fast or too slow
 BALL_X BYTE 14                  ;moves row
 BALL_Y BYTE 39					;moves column
-COUNT BYTE 0
+COUNT BYTE 1
 
 BALL_VELOCITY_X BYTE 1
 BALL_VELOCITY_Y BYTE 1 
@@ -145,11 +146,12 @@ PLAYER2_JEET_GAYA:
 call PLAYER2_WINS
 
 stop:
-
-exit
+	mov eax, 5000
+	call delay
+	exit
 
 Exitprogram:
-   invoke Exitprocess, 0
+	invoke Exitprocess, 0
 
 main ENDP
 
@@ -613,9 +615,8 @@ DRAW_BALL ENDP
 
 CLEAR_SCREEN PROC
 
-	mov eax, 90
+	mov eax, GAME_SPEED			; This controls how fast the game runs
 	call delay
-	inc COUNT
 	mov dh,BALL_X
 	mov dl,BALL_Y
 	call Gotoxy
