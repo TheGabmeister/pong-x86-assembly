@@ -149,39 +149,30 @@ main ENDP
 
 PLAYER2_WINS PROC
 
- mov edx, OFFSET LOST1
-	mov eax, RED
+	mov eax, LIGHTCYAN
 	call SetTextColor
+
+	mov edx, OFFSET LOST1
     call WriteString
     call Crlf
 
 	mov edx, OFFSET LOST2
-	mov eax, RED
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET LOST3
-	mov eax, RED
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET LOST4
-	mov eax, RED
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET LOST5
-	mov eax, RED
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET LOST6
-	mov eax, RED
-	call SetTextColor
     call WriteString
     call Crlf
 
@@ -192,39 +183,30 @@ PLAYER2_WINS ENDP
 
 PLAYER1_WINS PROC
 
-    mov edx, OFFSET WIN1
-	mov eax, BLUE
+	mov eax, YELLOW
 	call SetTextColor
+    
+	mov edx, OFFSET WIN1
     call WriteString
     call Crlf
 
 	mov edx, OFFSET WIN2
-	mov eax, BLUE
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET WIN3
-	mov eax, BLUE
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET WIN4
-	mov eax, BLUE
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET WIN5
-	mov eax, BLUE
-	call SetTextColor
     call WriteString
     call Crlf
 
 	mov edx, OFFSET WIN6
-	mov eax, BLUE
-	call SetTextColor
     call WriteString
     call Crlf
 
@@ -368,7 +350,7 @@ DRAW_LEFT_PADDLES PROC
 	mov ORIGINAL_PADDLE_LEFT_X,dh                
     mov ORIGINAL_PADDLE_LEFT_Y,dl 
 
-	mov eax, BLUE
+	mov eax, YELLOW
     call SetTextColor
 	call Gotoxy
 	mov al, 0DBh
@@ -379,9 +361,6 @@ DRAW_LEFT_PADDLES PROC
 		inc PADDLE_LEFT_X	
 		mov dh,PADDLE_LEFT_X
 		call Gotoxy
-		mov eax, BLUE
-        call SetTextColor
-
 		mov al, 0DBh
 	    call WRITEchar
 	Loop L1
@@ -404,7 +383,7 @@ DRAW_RIGHT_PADDLES PROC
 	mov ORIGINAL_PADDLE_RIGHT_X,dh                
     mov ORIGINAL_PADDLE_RIGHT_Y,dl 
 
-	mov eax, RED
+	mov eax, LIGHTCYAN
     call SetTextColor
 	call Gotoxy
 	mov al, 0DBh
@@ -417,8 +396,6 @@ DRAW_RIGHT_PADDLES PROC
 		mov dh,PADDLE_RIGHT_X
 		call Gotoxy
 		call writechar
-		mov eax, RED
-        call SetTextColor
 	Loop L1
 
 	mov bl,ORIGINAL_PADDLE_RIGHT_X
@@ -670,7 +647,7 @@ mov dh,12
 mov dl,87
 call Gotoxy
 mov edx,OFFSET Player1_Score
-mov eax, BLUE
+mov eax, YELLOW
 call SetTextColor
 call writeString
 
@@ -679,7 +656,7 @@ mov dl,87
 call Gotoxy
 
 mov edx,OFFSET Player2_Score
-mov eax, RED
+mov eax, LIGHTCYAN
 call SetTextColor
 call writeString
 
