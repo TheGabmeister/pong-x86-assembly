@@ -60,25 +60,20 @@ TITLE_15 BYTE "P::::::::P             OO:::::::::OO   N::::::N        N::::::N  
 TITLE_16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN        GGGGGG   GGGG",  0
 TITLE_ANIM_SPEED DWORD 90
 
-; =========================================================================================================
+WIN1 BYTE "                   _____  _           __     ________ _____     __   __          _______ _   _  _____     ",0
+WIN2 BYTE "                  |  __ \| |        /\\ \   / /  ____|  __ \   /_ |  \ \        / /_   _| \ | |/ ____|	",0
+WIN3 BYTE "                  | |__) | |       /  \\ \_/ /| |__  | |__) |   | |   \ \  /\  / /  | | |  \| | (___		",0
+WIN4 BYTE "                  |  ___/| |      / /\ \\   / |  __| |  _  /    | |    \ \/  \/ /   | | | . ` |\___ \	    ",0
+WIN5 BYTE "                  | |    | |____ / ____ \| |  | |____| | \ \    | |     \  /\  /   _| |_| |\  |____) |	",0
+WIN6 BYTE "                  |_|    |______/_/    \_\_|  |______|_|  \_\   |_|      \/  \/   |_____|_| \_|_____/	    ",0
 
- WIN1 BYTE "                   _____  _           __     ________ _____     __   __          _______ _   _  _____     ",0
- WIN2 BYTE "                  |  __ \| |        /\\ \   / /  ____|  __ \   /_ |  \ \        / /_   _| \ | |/ ____|	",0
- WIN3 BYTE "                  | |__) | |       /  \\ \_/ /| |__  | |__) |   | |   \ \  /\  / /  | | |  \| | (___		",0
- WIN4 BYTE "                  |  ___/| |      / /\ \\   / |  __| |  _  /    | |    \ \/  \/ /   | | | . ` |\___ \	    ",0
- WIN5 BYTE "                  | |    | |____ / ____ \| |  | |____| | \ \    | |     \  /\  /   _| |_| |\  |____) |	",0
- WIN6 BYTE "                  |_|    |______/_/    \_\_|  |______|_|  \_\   |_|      \/  \/   |_____|_| \_|_____/	    ",0
-                                                                                     
-
- LOST1 BYTE "                   _____  _           __     ________ _____     __     __          _______ _   _  _____     ",0
- LOST2 BYTE "                  |  __ \| |        /\\ \   / /  ____|  __ \   |__ \   \ \        / /_   _| \ | |/ ____|	",0
- LOST3 BYTE "                  | |__) | |       /  \\ \_/ /| |__  | |__) |     ) |   \ \  /\  / /  | | |  \| | (___		",0
- LOST4 BYTE "                  |  ___/| |      / /\ \\   / |  __| |  _  /     / /     \ \/  \/ /   | | | . ` |\___ \	    ",0
- LOST5 BYTE "                  | |    | |____ / ____ \| |  | |____| | \ \    / /_      \  /\  /   _| |_| |\  |____) |	",0
- LOST6 BYTE "                  |_|    |______/_/    \_\_|  |______|_|  \_\   |____|     \/  \/   |_____|_| \_|_____/	    ",0                                                    
+LOST1 BYTE "                   _____  _           __     ________ _____     __     __          _______ _   _  _____     ",0
+LOST2 BYTE "                  |  __ \| |        /\\ \   / /  ____|  __ \   |__ \   \ \        / /_   _| \ | |/ ____|	",0
+LOST3 BYTE "                  | |__) | |       /  \\ \_/ /| |__  | |__) |     ) |   \ \  /\  / /  | | |  \| | (___		",0
+LOST4 BYTE "                  |  ___/| |      / /\ \\   / |  __| |  _  /     / /     \ \/  \/ /   | | | . ` |\___ \	    ",0
+LOST5 BYTE "                  | |    | |____ / ____ \| |  | |____| | \ \    / /_      \  /\  /   _| |_| |\  |____) |	",0
+LOST6 BYTE "                  |_|    |______/_/    \_\_|  |______|_|  \_\   |____|     \/  \/   |_____|_| \_|_____/	    ",0                                                    
 																		   
-
-
 Player1_Score BYTE "PLAYER 1 Points: ",0
 Player2_Score BYTE "PLAYER 2 Points: ",0
 PLAYER1 BYTE 0
@@ -97,8 +92,6 @@ BOX_TOP_LEFT_Y BYTE 0
 
 PlAYER_CURSOR_X BYTE 19
 PlAYER_CURSOR_Y BYTE 42
-
-NEXT_LINE BYTE 0dh,0ah
 
 ; =========================================================================================================
 
@@ -423,16 +416,16 @@ RET
 
 MOVE_LEFT_PADDLE_DOWN:
 	cmp val2,28
-	jae quit
+	jae Quit
 
 	inc PADDLE_LEFT_X
 	mov dh,VAL1
 	mov dl,1
 	call Gotoxy
 	mov al, ' '
-	call WRITEchar
-	INC VAL1
-	INC VAL2
+	call WriteChar
+	inc VAL1
+	inc VAL2
 
 	finish:
 
@@ -440,14 +433,14 @@ RET
 
 MOVE_LEFT_PADDLE_UP:
 	cmp VAL1,1
-	jbe quit 
+	jbe Quit 
 	
 	dec PADDLE_LEFT_X
 	mov dh,VAL2
 	mov dl,1
 	call Gotoxy
 	mov al, ' '
-	call WRITEchar
+	call WriteChar
 	DEC VAL1
 	DEC VAL2
 
@@ -476,7 +469,7 @@ MOVE_RIGHT_PADDLE_DOWN:
 	mov dl,77
 	call Gotoxy
 	mov al, ' '
-	call WRITEchar
+	call WriteChar
 	INC VAL3
 	INC VAL4
 RET
@@ -490,7 +483,7 @@ MOVE_RIGHT_PADDLE_UP:
 	mov dl,77
 	call Gotoxy
 	mov al, ' '
-	call WRITEchar
+	call WriteChar
 	DEC VAL3
 	DEC VAL4
 
