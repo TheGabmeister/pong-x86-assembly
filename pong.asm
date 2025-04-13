@@ -1,3 +1,8 @@
+; Pong Game
+
+; Library from the book Assembly Language for x86 Processors by Kip Irvine
+; https://github.com/surferkip/asmbook/blob/main/Irvine.zip
+; Documentation https://csc.csudh.edu/mmccullough/asm/help/
 INCLUDE Irvine32.inc
 BUFFER_SIZE = 501
 .data
@@ -35,6 +40,34 @@ VAL3 BYTE 1
 VAL4 BYTE 7
 
 GAME_START_FLAG BYTE 0  ;flag to determine if the game should start 
+
+intro BYTE "Press 'ENTER' to Start",0
+introXPos BYTE 50
+introYPos BYTE 25
+xPos BYTE 17
+yPos BYTE 3
+
+; Define an array of strings with newline characters at the end
+string_array DWORD string01, string02, string03, string04, string05, string06, string07, string08, string09, string10, string11, string12, string13, string14, string15, string16
+                                                                                   
+string01 BYTE "PPPPPPPPPPPPPPPPP        OOOOOOOOO     NNNNNNNN        NNNNNNNN        GGGGGGGGGGGGG",  0
+string02 BYTE "P::::::::::::::::P     OO:::::::::OO   N:::::::N       N::::::N     GGG::::::::::::G",  0
+string03 BYTE "P::::::PPPPPP:::::P  OO:::::::::::::OO N::::::::N      N::::::N   GG:::::::::::::::G",  0
+string04 BYTE "PP:::::P     P:::::PO:::::::OOO:::::::ON:::::::::N     N::::::N  G:::::GGGGGGGG::::G",  0
+string05 BYTE "  P::::P     P:::::PO::::::O   O::::::ON::::::::::N    N::::::N G:::::G       GGGGGG",  0
+string06 BYTE "  P::::P     P:::::PO:::::O     O:::::ON:::::::::::N   N::::::NG:::::G              ",  0
+string07 BYTE "  P::::PPPPPP:::::P O:::::O     O:::::ON:::::::N::::N  N::::::NG:::::G              ",  0
+string08 BYTE "  P:::::::::::::PP  O:::::O     O:::::ON::::::N N::::N N::::::NG:::::G    GGGGGGGGGG",  0
+string09 BYTE "  P::::PPPPPPPPP    O:::::O     O:::::ON::::::N  N::::N:::::::NG:::::G    G::::::::G",  0
+string10 BYTE "  P::::P            O:::::O     O:::::ON::::::N   N:::::::::::NG:::::G    GGGGG::::G",  0
+string11 BYTE "  P::::P            O:::::O     O:::::ON::::::N    N::::::::::NG:::::G        G::::G",  0
+string12 BYTE "  P::::P            O::::::O   O::::::ON::::::N     N:::::::::N G:::::G       G::::G",  0
+string13 BYTE "PP::::::PP          O:::::::OOO:::::::ON::::::N      N::::::::N  G:::::GGGGGGGG::::G",  0
+string14 BYTE "P::::::::P           OO:::::::::::::OO N::::::N       N:::::::N   GG:::::::::::::::G",  0
+string15 BYTE "P::::::::P             OO:::::::::OO   N::::::N        N::::::N     GGG::::::GGG:::G",  0
+string16 BYTE "PPPPPPPPPP               OOOOOOOOO     NNNNNNNN         NNNNNNN        GGGGGG   GGGG",  0
+
+; =========================================================================================================
 
 tilte0 BYTE "                                                                                                 ",0
 title1 BYTE "                    _____   ____  _   _  _____               _____          __  __ ______        ",0
@@ -286,143 +319,42 @@ PLAYER1_WINS ENDP
 
 
 mainMenu PROC
-    mov edx, OFFSET title1
-	mov eax, RED
-	call SetTextColor
+    
+	mov esi, OFFSET string_array
+    mov ecx, LENGTHOF string_array
+    mov bl, xPos
+    mov bh, yPos
+
+    L1:                         ; Print game title
+    mov dl, bl
+	mov dh, bh
+	call Gotoxy
+    mov edx, [esi]
     call WriteString
-    call crlf
+    add esi, TYPE string_array
+    inc bh
+    loop L1
 
-	mov edx, OFFSET title2
-	mov eax, GREEN
-	call SetTextColor
+    mov dl, introXPos           ; Print "Press 'ENTER' to Start"
+    mov dh, introYPos
+    call Gotoxy
+    mov edx, OFFSET intro
     call WriteString
-    call crlf
+    call ResetCursor
 
-	mov edx, OFFSET title3
-	mov eax, RED
-	call SetTextColor
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title4
-	mov eax, GREEN
-	call SetTextColor
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title5
-	mov eax, RED
-	call SetTextColor
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title6
-	mov eax, GREEN
-	call SetTextColor
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title7
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title8
-    call WriteString
-    call crlf
-
-	mov edx, OFFSET title9
-    call WriteString
-    call crlf
-
-	options:
-    mov edx, OFFSET START_GAME_MSG
-	mov eax, BLUE
-	call SetTextColor
-    call WriteString
-    call crlf
-
-	mov edx,OFFSET DISPLAY
-	call WriteString
-	call crlf
-
-	mov edx, OFFSET EXIT_MSG
-	mov eax, BLUE
-	call SetTextColor
-    call WriteString
-    call crlf
-
-    mov edx, OFFSET SELECT_OPTION_MSG
-	mov eax, BLUE
-	call SetTextColor
-	call crlf
-    call WriteString
-   
-    call ReadInt
-	
-    ; Check the selected option
-    cmp eax, 1
-    je InputPlayerNames
-	cmp eax,2
-	je line_BARHO
-    cmp eax, 3
-    je ExitGame
-
-
-    mov edx, OFFSET INVALID_MSG
-	mov eax, RED
-	call SetTextColor
-    call WriteString
-    call crlf
-	jmp options
-  
-
-	InputPlayerNames:
-	    mov eax, 0     ;Display a box for player names
-		mov edx, 0
-		call DRAW_BOX
-
-		;Print Player 1's name
-        mov edx, OFFSET INPUT_PLAYER_1
-        mov eax, YELLOW
-        call SetTextColor
-        mov dh, PLAYER_CURSOR_X
-        mov dl, PLAYER_CURSOR_Y
-        call gotoxy
-		mov edx, OFFSET INPUT_PLAYER_1
-        call WriteString
-
-		
-		mov edx, OFFSET PLAYER_1
-		mov ecx, 30
-		call ReadString
-		mov LENGTH_PLAYER1,al
-
-        ; Print Player 2's name
-        mov edx, OFFSET INPUT_PLAYER_2
-        mov eax, YELLOW
-        call SetTextColor
-		INC PLAYER_CURSOR_X
-        mov dh,PLAYER_CURSOR_X
-        mov dl, PLAYER_CURSOR_Y
-        call gotoxy
-		mov edx, OFFSET INPUT_PLAYER_2
-        call WriteString
-
-
-		mov edx, OFFSET PLAYER_2
-		mov ecx, 30
-		call ReadString
-		mov LENGTH_PLAYER2,al
-
-		mov GAME_START_FLAG, 1
-		call Clrscr
-		ret
+	MenuLoop:
+		call Readkey
+		cmp al,13           ; Check if 'ENTER' key (ASCII 13) is pressed  
+		jz StartGame
+		cmp al,27           ; Check if 'ESC' key (ASCII 13) is pressed 
+		jz ExitGame
+		jmp MenuLoop
 
     StartGame:
         mov GAME_START_FLAG, 1   ; Set the flag to 1 indicating the game should start
 		call Clrscr
         ret
-	line_BARHO:
+
 	call VIEW_FILE
     ExitGame:
         invoke ExitProcess, 0    ; Exit the program
@@ -853,5 +785,11 @@ MOV COUNT,0
 RET
 GAME_OVER ENDP
 
+ResetCursor PROC
+    mov dl, 0
+	mov dh, 0
+	call Gotoxy
+    ret
+ResetCursor ENDP
 
 END main
