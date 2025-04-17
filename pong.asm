@@ -89,6 +89,7 @@ INPUT_PLAYER_2 BYTE "Enter Player 2's Name: ",0
 
 BOX_TOP_LEFT_X BYTE 0
 BOX_TOP_LEFT_Y BYTE 0
+DIVIDER_X BYTE 82
 
 PlAYER_CURSOR_X BYTE 19
 PlAYER_CURSOR_Y BYTE 42
@@ -107,7 +108,7 @@ mov edx,0
 call DRAW_BALL
 call DRAW_LEFT_PADDLES
 call DRAW_TEXT
-;call DRAW_BOX
+call DRAW_DIVIDER
 CHECK_TIME:
 
 call CLEAR_SCREEN
@@ -674,6 +675,24 @@ call writedec
 
 RET
 DRAW_TEXT ENDP
+
+; =========================================================================================================
+
+DRAW_DIVIDER PROC
+
+    mov ecx, 30          
+    mov dl, DIVIDER_X    
+    mov dh, 0  
+	mov eax, WHITE
+    call SetTextColor
+    L2:
+        call Gotoxy
+        mov al, 0DBh  
+        call WriteChar
+        inc dh           
+        loop L2
+    ret
+DRAW_DIVIDER ENDP
 
 ; =========================================================================================================
 
